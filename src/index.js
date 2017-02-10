@@ -8,7 +8,6 @@ var GAME_STATES = {
     START: "_STARTMODE", // Entry point, start the game.
     HELP: "_HELPMODE" // The user is asking for help.
 };
-var questions = require("./questions");
 
 /**
  * When editing your questions pay attention to your punctuation. Make sure you use question marks or periods.
@@ -17,8 +16,7 @@ var questions = require("./questions");
 var languageString = {
     "en-GB": {
         "translation": {
-            "QUESTIONS" : questions["QUESTIONS_EN_GB"],
-            "GAME_NAME" : "British Reindeer Trivia", // Be sure to change this for your skill.
+            "GAME_NAME" : "Lord of the Rings Trivia", // Be sure to change this for your skill.
             "HELP_MESSAGE": "I will ask you %s multiple choice questions. Respond with the number of the answer. " +
             "For example, say one, two, three, or four. To start a new game at any time, say, start game. ",
             "REPEAT_QUESTION_MESSAGE": "To repeat the last question, say, repeat. ",
@@ -44,8 +42,7 @@ var languageString = {
     },
     "en-US": {
         "translation": {
-            "QUESTIONS" : questions["QUESTIONS_EN_US"],
-            "GAME_NAME" : "American Reindeer Trivia", // Be sure to change this for your skill.
+            "GAME_NAME" : "Lord of the Rings Trivia", // Be sure to change this for your skill.
             "HELP_MESSAGE": "I will ask you %s multiple choice questions. Respond with the number of the answer. " +
             "For example, say one, two, three, or four. To start a new game at any time, say, start game. ",
             "REPEAT_QUESTION_MESSAGE": "To repeat the last question, say, repeat. ",
@@ -71,8 +68,7 @@ var languageString = {
     },
     "de-DE": {
         "translation": {
-            "QUESTIONS" : questions["QUESTIONS_DE_DE"],
-            "GAME_NAME" : "Wissenswertes über Rentiere in Deutsch", // Be sure to change this for your skill.
+            "GAME_NAME" : "Herr der Ringe Trivia", // Be sure to change this for your skill.
             "HELP_MESSAGE": "Ich stelle dir %s Multiple-Choice-Fragen. Antworte mit der Zahl, die zur richtigen Antwort gehört. " +
             "Sage beispielsweise eins, zwei, drei oder vier. Du kannst jederzeit ein neues Spiel beginnen, sage einfach „Spiel starten“. ",
             "REPEAT_QUESTION_MESSAGE": "Wenn die letzte Frage wiederholt werden soll, sage „Wiederholen“ ",
@@ -133,7 +129,7 @@ var startStateHandlers = Alexa.CreateStateHandler(GAME_STATES.START, {
     "StartGame": function (newGame) {
         var speechOutput = newGame ? this.t("NEW_GAME_MESSAGE", this.t("GAME_NAME")) + this.t("WELCOME_MESSAGE", GAME_LENGTH.toString()) : "";
         // Select GAME_LENGTH questions for the game
-        var translatedQuestions = this.t("QUESTIONS");
+        var translatedQuestions = questions;
         var gameQuestions = populateGameQuestions(translatedQuestions);
         // Generate a random index for the correct answer, from 0 to 3
         var correctAnswerIndex = Math.floor(Math.random() * (ANSWER_COUNT));
@@ -257,7 +253,7 @@ function handleUserGuess(userGaveUp) {
     var currentScore = parseInt(this.attributes.score);
     var currentQuestionIndex = parseInt(this.attributes.currentQuestionIndex);
     var correctAnswerText = this.attributes.correctAnswerText;
-    var translatedQuestions = this.t("QUESTIONS");
+    var translatedQuestions = questions;
 
     if (answerSlotValid && parseInt(this.event.request.intent.slots.Answer.value) == this.attributes["correctAnswerIndex"]) {
         currentScore++;
@@ -371,3 +367,150 @@ function isAnswerSlotValid(intent) {
     var answerSlotIsInt = answerSlotFilled && !isNaN(parseInt(intent.slots.Answer.value));
     return answerSlotIsInt && parseInt(intent.slots.Answer.value) < (ANSWER_COUNT + 1) && parseInt(intent.slots.Answer.value) > 0;
 }
+
+var questions = [
+        {
+            "One ring to bring them all, and in the darkness bind them. In the land of Mordor...": [
+                "Where the shadows lie",
+                "Where the Shire lies",
+                "Where Sauron sleeps",
+                "Where Mount Dom awaits"
+            ]
+        },
+        {
+            "What two items does Bilbo give to Frodo in Rivendell?": [
+                "Mithril shirt and sword",
+                "The One Ring and Sting",
+                "Shirt and cloak",
+                "Bow and arrows"
+            ]
+        },
+        {
+            "What is Gandalf known as to the Elves?": [
+                "Mithrandir",
+                "Glorfindel",
+                "Thorin",
+                "Celeborn"
+            ]
+        },
+        {
+            "There are four Hobbits, Merry, Pippin, Frodo, and Samwise. What are their last names?": [
+                "Brandybuck, Took, Baggins, and Gamgee",
+                "Brandywine, Terk, Baggin, Gimli",
+                "Buckland, Tool, Bergins, Gandalf",
+                "Barliman, Tolk, Buggins, Gamgel"
+            ]
+        },
+        {
+            "Who cures Frodo in Rivendell?": [
+                "Elrond",
+                "Theoden",
+                "Gandalf",
+                "Aragorn"
+            ]
+        },
+        {
+            "Who are three patients cured by Aragorn in 'The Return Of The King'?": [
+                "Frodo, Pippin, Denethor",
+                "Faramir, Merry, Eowyn",
+                "Faramir, Pippin, Glamdring",
+                "Samwise, Boromir, Eowyn"
+            ]
+        },
+        {
+            "Who later tells Frodo that he learned of Boromir's death by finding his body floating down the river in a boat?": [
+                "Faramir",
+                "Elrond",
+                "Gandalf",
+                "Sam"
+            ]
+        },
+        {
+            "What alias does Eowyn use to travel with the Riders of Rohan and fight in the battle of the Pellenor Fields?": [
+                "Dernhelm",
+                "Glamdring",
+                "Arwen",
+                "Hamfast"
+            ]
+        },
+        {
+            "What race is Smeagol?": [
+                "Hobbit",
+                "Elf",
+                "Gollum",
+                "Orc"
+            ]
+        },
+        {
+            "Who is the only one of the Fellowship who refuses to go into Lothlorien?": [
+                "Boromir",
+                "Gimli",
+                "Aragorn",
+                "Frodo"
+            ]
+        },
+        {
+            "Who are the last two members of the fellowship who sail across the sea to the Undying Lands?": [
+                "Legolas and Gimli",
+                "Merry and Pippin",
+                "Gandalf and Frodo",
+                "Aragorn and Gandalf"
+            ]
+        },
+        {
+            "Which member of the thirteen Dwarves in 'The Hobbit' does Frodo meet in Rivendell?": [
+                "Gloin",
+                "Thorin",
+                "Bofur",
+                "Balin"
+            ]
+        },
+        {
+            "What is written on the doors into Moria?": [
+                "Speak Friend and Enter",
+                "Talk Amongst Yourselves",
+                "One Ring To Rule Them All",
+                "Here Lies Balin, Lord of Moria"
+            ]
+        },
+        {
+            "Who does Gandalf borrow Shadowfax from?": [
+                "Denethor",
+                "Theoden",
+                "Eomer",
+                "Aragorn"
+            ]
+        },
+        {
+            "How was Balin killed?": [
+                "Shot by an orc from behind a rock",
+                "Killed by the Nazgul",
+                "Slain by his own men",
+                "Crushed by rocks"
+            ]
+        },
+        {
+            "Who does Elrond object to being a member of the Fellowship?": [
+                "Pippin",
+                "Gimli",
+                "Boromir",
+                "Samwise"
+            ]
+        },
+        {
+            "What is Wormtongue's nickname for Gandalf?": [
+                "Stormcrow",
+                "The Grey Fool",
+                "Tempest",
+                "Mithrandir"
+            ]
+        },
+        {
+            "Who does Sam see laying 'asleep' in Galadriel's mirror?": [
+                "Boromir",
+                "Frodo",
+                "Merry",
+                "Himself"
+            ]
+        }        
+    ];
